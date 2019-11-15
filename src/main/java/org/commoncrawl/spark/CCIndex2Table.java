@@ -33,11 +33,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.DataFrameWriter;
@@ -94,7 +94,7 @@ public class CCIndex2Table {
 			// least equal to the number of skipped characters
 			LOG.error("Failed to read line: {}", line);
 		}
-		JsonElement json = new JsonParser().parse(new JsonReader(in));
+		JsonElement json = JsonParser.parseReader(new JsonReader(in));
 		if (!json.isJsonObject()) {
 			LOG.error("Failed to read JSON: {}", json);
 			return null;
@@ -272,7 +272,7 @@ public class CCIndex2Table {
 				.addOption(new Option(null, "outputCompression", true,
 						"data output compression codec: gzip/zlib (default), snappy, lzo, none"));
 		
-		CommandLineParser parser = new PosixParser();
+		CommandLineParser parser = new DefaultParser();
 		CommandLine cli;
 
 		try {
